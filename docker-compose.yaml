@@ -1,0 +1,16 @@
+services:
+  rw-updater:
+    build: .
+    container_name: rw-subscription-updater
+    hostname: rw-subscription-updater
+    restart: always
+    env_file: .env
+    stop_grace_period: 30s
+    networks:
+      - remnawave-network
+
+networks:
+  remnawave-network:
+    name: remnawave-network
+    driver: bridge
+    external: true

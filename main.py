@@ -1,9 +1,10 @@
-from dotenv import load_dotenv
-import requests
-import os
-import time
-import signal
 import logging
+import os
+import signal
+import time
+
+import requests
+from dotenv import load_dotenv
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,7 +25,7 @@ def handle_shutdown(signum, frame) -> None:
 def check_subscription() -> None:
     token = os.getenv("REMNAWAVE_TOKEN")
     rw_address = os.getenv("REMNAWAVE").rstrip("/")
-    ssl_verify = rw_address.startswith("https://")
+    is_https = rw_address.startswith("https://")
     rule_name = os.getenv("RULE_NAME")
     header_name = os.getenv("HEADER_NAME")
     github_url = os.getenv("GITHUB_URL")
@@ -36,7 +37,7 @@ def check_subscription() -> None:
     }
 
     # If proto is http -> add additional headers
-    if not ssl_verify:
+    if not is_https:
         headers["X-Forwarded-Proto"] = "https"
         headers["X-Forwarded-For"] = "127.0.0.1"
 
@@ -99,14 +100,14 @@ def main() -> None:
     while not shutdown_requested:
         try:
             check_subscription()
-        except Exception as e:
-            logger.error(f"ошибка во время проверки: {e}")
+        except Exception:
+            logger.exception("Ошибка во время проверки")
 
         for _ in range(interval):
             if shutdown_requested:
                 break
             time.sleep(1)
-            
+
     logger.info("Сервис остановлен")
 
 

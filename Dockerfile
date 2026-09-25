@@ -1,4 +1,7 @@
-FROM python:3.13-slim
+# Версия задаётся в .python-version, CI передаёт её через --build-arg.
+# Значение по умолчанию нужно для локальной сборки через docker compose.
+ARG PYTHON_VERSION=3.13
+FROM python:${PYTHON_VERSION}-slim
 
 WORKDIR /app
 
