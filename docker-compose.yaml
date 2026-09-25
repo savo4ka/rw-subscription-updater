@@ -1,6 +1,6 @@
 services:
   rw-updater:
-    build: .
+    image: ghcr.io/savo4ka/rw-subscription-updater:latest
     container_name: rw-subscription-updater
     hostname: rw-subscription-updater
     restart: always
